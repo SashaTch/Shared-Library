@@ -18,7 +18,7 @@ def createBanner(def ... msgs) {
 }
 
 
-def msgFlatten(def list, def msgs) {
+def msgFlatten(def list, def msgs){
    list = list ?: []
    if (!(msgs instanceof String) && !(msgs instanceof GString)) {
        msgs.each { msg ->
