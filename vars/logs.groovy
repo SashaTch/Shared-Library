@@ -1,5 +1,9 @@
-def echoMessage(msgs) {
-   echo "\e[92m${msgs}\e[0m\n"
+def echoGreen(msgs) {
+    ansiColor('xterm') {
+        echo "\u001B[32m${msgs}\u001B[0m\n"
+    }
+}
+
 }
 def echoStage(msgs) {
     echo """
