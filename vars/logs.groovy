@@ -1,6 +1,6 @@
 def echoGreen(msgs) {
     ansiColor('xterm') {
-        echo "\e[92m${msgs}\\e[0m\n"
+        sh 'echo "\e[92m${msgs}\\e[0m\n"'
     }
 }
 
