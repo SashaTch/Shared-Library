@@ -1,3 +1,4 @@
+//used for sup stages
 def echoGreen(msgs) {
      echo """
 \033[32m============\033[0m\n
@@ -6,11 +7,12 @@ def echoGreen(msgs) {
 """
 }
 
+//used for comments
 def echoYellow(msgs) {
      echo "\033[33m${msgs}\033[0m"
 }
 
-
+//used for stages
 def echoStage(msgs) {
     echo """
 \033[35m==========================================\033[0m\n
