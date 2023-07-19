@@ -1,10 +1,6 @@
 //used for sup stages
 def echoGreen(msgs) {
-     echo """
-\033[32m============\033[0m\n
-\033[32m${msgs}\033[0m\n
-\033[32m============\033[0m\n
-"""
+     echo "\033[32m|=====${msgs}=====|\033[0m"
 }
 
 //used for comments
