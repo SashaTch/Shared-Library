@@ -19,13 +19,13 @@ def echoStage(msgs) {
 """
 }
 
-def aws_credentials(shell_commands) {
+def aws_credentials(shell_commands, id) {
     withCredentials([[
         $class: 'AmazonWebServicesCredentialsBinding',
-        credentialsId: "AWS",
+        credentialsId: "${id}",
         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-    ]]) {
+        ]]) {
         // Split the shell commands into separate commands
         def commands = shell_commands.split('\n')
         // Iterate over each command
@@ -35,6 +35,27 @@ def aws_credentials(shell_commands) {
             if (command) { 
                 echo "\033[33m< excuting :${command} >\033[0m"
                 sh "${command}"
+            }
+        }
+    }
+}
+
+def user_root(shell_command, id) {
+     withCredentials([[
+          $class: 'usernamePassword'
+          credentialsId: "${id}", 
+          usernameVariable: 'USERNAME', 
+          passwordVariable: 'PASSWORD'
+          ]]) {
+          // Split the shell commands into separate commands
+          def commands = shell_commands.split('\n')
+          // Iterate over each command
+          for (command in commands) {
+              // Trim and execute each command
+              command = command.trim()
+              if (command) { 
+                  echo "\033[33m< excuting :${command} >\033[0m"
+                  sh "${command}"
             }
         }
     }
