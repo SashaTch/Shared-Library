@@ -27,4 +27,5 @@ def aws_credentials(shell_command) {
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
           sh '${shell_command}'
+     }
 }
