@@ -33,8 +33,8 @@ def aws_credentials(shell_commands) {
             // Trim and execute each command
             command = command.trim()
             if (command) { 
-                sh "${command}"
                 echo "\033[33m< excuting :${command} >\033[0m"
+                sh "${command}"
             }
         }
     }
