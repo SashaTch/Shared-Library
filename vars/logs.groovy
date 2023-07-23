@@ -22,7 +22,7 @@ def echoStage(msgs) {
 def aws_credentials(id, shell_commands) {
     withCredentials([[
         $class: 'AmazonWebServicesCredentialsBinding',
-        credentialsId: "${id}",
+        credentialsId: id,
         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
         ]]) {
@@ -43,7 +43,7 @@ def aws_credentials(id, shell_commands) {
 def user_root(id, shell_command) {
      withCredentials([[
           $class: 'usernamePassword'
-          credentialsId: "${id}", 
+          credentialsId: id, 
           usernameVariable: 'USERNAME', 
           passwordVariable: 'PASSWORD'
           ]]) {
