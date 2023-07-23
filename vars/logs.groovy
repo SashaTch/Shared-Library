@@ -40,9 +40,9 @@ def aws_credentials(id, shell_commands) {
     }
 }
 
-def user_root(id, shell_command) {
+def user_root(id, shell_commands) {
      withCredentials([
-          $class: 'usernamePassword'
+          $class: 'UsernamePasswordMultiBinding',
           credentialsId: id, 
           usernameVariable: 'USERNAME', 
           passwordVariable: 'PASSWORD'
@@ -54,7 +54,7 @@ def user_root(id, shell_command) {
               // Trim and execute each command
               command = command.trim()
               if (command) { 
-                  echo "\033[33m< excuting :${command} >\033[0m"
+                  echo "\033[33m< executing :${command} >\033[0m"
                   sh "${command}"
             }
         }
