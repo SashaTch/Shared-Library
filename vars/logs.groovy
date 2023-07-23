@@ -19,7 +19,7 @@ def echoStage(msgs) {
 """
 }
 
-def aws_credentials(shell_commands, id) {
+def aws_credentials(id, shell_commands) {
     withCredentials([[
         $class: 'AmazonWebServicesCredentialsBinding',
         credentialsId: "${id}",
@@ -40,7 +40,7 @@ def aws_credentials(shell_commands, id) {
     }
 }
 
-def user_root(shell_command, id) {
+def user_root(id, shell_command) {
      withCredentials([[
           $class: 'usernamePassword'
           credentialsId: "${id}", 
