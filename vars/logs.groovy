@@ -26,6 +26,14 @@ def aws_credentials(shell_command) {
                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
-          sh '${shell_command}'
+          // Split the shell command into separate commands
+          def commands = shell_command.split('$$')
+
+          // Iterate over each command
+          for (command in commands) {
+          // Trim and execute each command
+          command = command.trim()
+          sh "${command}"
+          echo "\033[33m<${command} has been completed successfully>\033[0m"
      }
 }
