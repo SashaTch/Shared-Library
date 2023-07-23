@@ -55,15 +55,20 @@ pipeline {
                     logs.echoYellow("testing+deployment server----->")
                     withCredentials([[
                         $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS",
+                        credentialsId: 'AWS',
                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
-                        sh "bash /etc/ansible/scripts/state.sh run environment flask"
+                        sh 'bash /etc/ansible/scripts/state.sh state run environment flask /var/lib/jenkins/.ssh/aws_rsa'
                         logs.echoGreen("testing+deployment server----->ONLINE")
                         sh 'ansible-playbook /etc/ansible/packages.yml --private-key=/var/lib/jenkins/.ssh/aws_rsa'
-                        sh 'scp -i ~/.ssh/aws_rsa /var/lib/jenkins/workspace/Project/app.tar.gz ec2-user@$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Test" --query "Reservations[*].Instances[*].PublicIpAddress" --output text):~'
+                        withCredentials([usernamePassword(credentialsId: 'sasha', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "echo '${PASSWORD}' | su -l ${USERNAME} -c 'bash /etc/ansible/scripts/state.sh deploy run Name Test /home/${USERNAME}/.ssh/aws_rsa'"
+                        sh "echo '${PASSWORD}' | su -l ${USERNAME} -c 'bash /etc/ansible/scripts/state.sh test run Name Test /home/${USERNAME}/.ssh/aws_rsa'"
+                        sh 'bash /etc/ansible/scripts/state.sh state stop Name Test /var/lib/jenkins/.ssh/aws_rsa'
+                        }
                         logs.echoGreen("all packages and app deployed/updated in the test server")
+                        logs.echoYellow("shutting test server---.continuing to deployment serve")
                     }
                 }
             }
@@ -72,6 +77,20 @@ pipeline {
             steps {
                 script{
                     logs.echoStage("Deploying the App")
+                    logs.echoYellow("checking app status:")
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'AWS',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    ]]) {
+                        withCredentials([usernamePassword(credentialsId: 'sasha', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "echo '${PASSWORD}' | su -l ${USERNAME} -c 'bash /etc/ansible/scripts/state.sh deploy run Name Deployment /home/${USERNAME}/.ssh/aws_rsa'"
+                        sh "echo '${PASSWORD}' | su -l ${USERNAME} -c 'bash /etc/ansible/scripts/state.sh test run Name Deployment /home/${USERNAME}/.ssh/aws_rsa'"
+                        }
+                        logs.echoGreen("all packages and app deployed/updated in the deployment server")
+                        logs.echoGreen("APP--->ONLINE AND WORKS")
+                    }
                 }
             }
         }
