@@ -55,3 +55,19 @@ def user_root(id, shell_commands) {
         }
     }
 }
+
+def token(id, shell_commands){
+     withCredentials([string(credentialsId: id, variable: 'TOKEN')]) {
+        // Split the shell commands into separate commands
+          def commands = shell_commands.split('\n')
+          // Iterate over each command
+          for (command in commands) {
+              // Trim and execute each command
+              command = command.trim()
+              if (command) { 
+                  echo "\033[33m< executing :${command} >\033[0m"
+                  sh "${command}"
+              }
+          }
+     }
+}
