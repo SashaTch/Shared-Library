@@ -41,12 +41,7 @@ def aws_credentials(id, shell_commands) {
 }
 
 def user_root(id, shell_commands) {
-     withCredentials([
-          $class: 'UsernamePasswordMultiBinding',
-          credentialsId: id, 
-          usernameVariable: 'USERNAME', 
-          passwordVariable: 'PASSWORD'
-          ]) {
+    withCredentials([usernamePassword(credentialsId: id, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]){
           // Split the shell commands into separate commands
           def commands = shell_commands.split('\n')
           // Iterate over each command
