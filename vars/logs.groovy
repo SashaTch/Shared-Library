@@ -75,7 +75,7 @@ def token(id, shell_commands){
 
 //docker rm
 def docker_rm(id) {
-     IMAGE_IDS=$(docker images | grep id | awk 'NR>3 {print $3}')
+     IMAGE_IDS=$(docker images | grep id | awk 'NR>3 {print $2}')
      if [ -n "$IMAGE_IDS" ]; then
           docker rmi $IMAGE_IDS
      else
